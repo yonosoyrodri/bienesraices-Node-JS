@@ -27,7 +27,7 @@ app.use(express.static("public"));
 // routing
 app.use("/auth", usuarioRoutes);
 
-const port = 3232;
+const port = process.env.PORT || 3232;
 app.listen(port, () => {
 	console.log(`EL proyecto esta corriendo en el puerto ${port}`);
 });
