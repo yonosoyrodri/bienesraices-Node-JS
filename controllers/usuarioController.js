@@ -77,11 +77,11 @@ const formularioRegistro = (req, res) => {
 };
 
 const registrar = async (req, res) => {
-	// validacion
-	await check("nombre").notEmpty().withMessage("El nombre no puede ir vacio").run(req);
-	await check("email").isEmail().withMessage("Eso no parece un email").run(req);
-	await check("password").isLength({ min: 6 }).withMessage("El password debe ser de al menos 6 caracteres").run(req);
-	await check("repetir_password").equals("password").withMessage("Los passwords no son iguales").run(req);
+  // validacion
+  await check("nombre").notEmpty().withMessage("El nombre no puede ir vacio").run(req);
+  await check("email").isEmail().withMessage("Eso no parece un email").run(req);
+  await check("password").isLength({ min: 6 }).withMessage("El password debe ser de al menos 6 caracteres").run(req);
+  await check("repetir_password").equals(req.body.repetir_password).withMessage("Los passwords no son iguales").run(req);
 
 	let resultado = validationResult(req);
 
@@ -255,7 +255,7 @@ const nuevoPassword = async (req, res) => {
 	const { password } = req.body;
 
 	// identificar quien hace el cambio
-	const usuario = await Usuario.findOne()({ where: { token } });
+	const usuario = await Usuario.findOne({ where: { token } });
 
 	const salt = await bcrypt.genSalt(10);
 	usuario.password = await bcrypt.hash(password, salt);
@@ -265,7 +265,7 @@ const nuevoPassword = async (req, res) => {
 
 	res.render("auth/confirmar-cuenta", {
 		pagina: "Password restablecido",
-		msensaje: "El password se guardó correctamente",
+		mensaje: "El password se guardó correctamente",
 	});
 };
 
